@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,8 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^5usrry19_!mi1v!mzfdmw6-atmz6f@o+6%)g)h4$a*&u-cmu4'
+PWD = os.path.dirname(os.path.realpath(__file__))
+try:
+    with open(os.path.join(PWD, 'secret_key.txt')) as f:
+        SECRET_KEY = f.read().strip()
+except FileNotFoundError:
+    print("You need to first create 'secret_key.txt' file next to 'settings.py' with Django secret key")
+    raise
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
