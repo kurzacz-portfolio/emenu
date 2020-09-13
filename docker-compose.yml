@@ -7,6 +7,10 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    expose:
+      - "5432"
+    networks:
+      - emenu-network
 
   api:
     build: .
@@ -17,3 +21,21 @@ services:
       - "8000:8000"
     depends_on:
       - database
+      - migration
+    networks:
+      - emenu-network
+
+  migration:
+    build: .
+    command: >
+      bash -c "wait-for-it database:5432 --
+      python manage.py migrate --noinput"
+    volumes:
+      - ./emenu:/code
+    depends_on:
+      - database
+    networks:
+      - emenu-network
+
+networks:
+  emenu-network:
