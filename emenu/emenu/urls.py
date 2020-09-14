@@ -17,4 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from api.views import public_views
 
-urlpatterns = [path("admin/", admin.site.urls), path("menus/", public_views.MenusListView.as_view())]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("menus/", public_views.MenusListView.as_view(), name="get_menus"),
+]
