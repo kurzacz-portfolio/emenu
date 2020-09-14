@@ -1,15 +1,14 @@
 from api.serializers import MenuSerializer
 from api.models import Menu
-from rest_framework.generics import GenericAPIView
-from rest_framework import mixins
+from rest_framework.generics import ListAPIView
+from django_filters.rest_framework import DjangoFilterBackend
 
 
-class MenusView(mixins.ListModelMixin, GenericAPIView):
+class MenusListView(ListAPIView):
     """ View to list menus in the app. """
 
-    serializer_class = MenuSerializer
     queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'created_at', "updated_at"]
 
-    def get(self, request, *args, **kwargs):
-        """ Returns a list of menus. """
-        return self.list(request, *args, **kwargs)
