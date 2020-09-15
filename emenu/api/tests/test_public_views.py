@@ -34,7 +34,10 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "name"), ("descending", "-name"),]
+        [
+            ("ascending", "name"),
+            ("descending", "-name"),
+        ]
     )
     def test_sort_by_name(self, name, ordering):
         # GIVEN
@@ -49,7 +52,10 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "dishes_count"), ("descending", "-dishes_count"),]
+        [
+            ("ascending", "dishes_count"),
+            ("descending", "-dishes_count"),
+        ]
     )
     def test_sort_by_dishes_count(self, name, ordering):
         # GIVEN
