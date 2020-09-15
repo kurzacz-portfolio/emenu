@@ -1,0 +1,14 @@
+[flake8]
+max-line-length = 100
+
+ignore =
+    # E501: line too long
+    #
+    # In Black lines can exceed max length, e.g. when long string appears
+    E501
+
+exclude =
+    api/admin.py
+
+per-file-ignores =
+    __init__.py:E402, F401

@@ -1,10 +1,12 @@
-from django.test import TestCase
-from api.models import Menu, Dish
-from django.urls import reverse
-from api.serializers import MenuSerializer
 from http import HTTPStatus
-from parameterized import parameterized
+
 from django.db.models import Count
+from django.test import TestCase
+from django.urls import reverse
+from parameterized import parameterized
+
+from api.models import Dish, Menu
+from api.serializers import MenuSerializer
 
 
 class MenusListView(TestCase):
@@ -34,7 +36,10 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "name"), ("descending", "-name"),]
+        [
+            ("ascending", "name"),
+            ("descending", "-name"),
+        ]
     )
     def test_sort_by_name(self, name, ordering):
         # GIVEN
@@ -49,7 +54,10 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "dishes_count"), ("descending", "-dishes_count"),]
+        [
+            ("ascending", "dishes_count"),
+            ("descending", "-dishes_count"),
+        ]
     )
     def test_sort_by_dishes_count(self, name, ordering):
         # GIVEN
