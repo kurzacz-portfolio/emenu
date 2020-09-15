@@ -3,16 +3,64 @@ from api.models import Menu, Dish
 from django.urls import reverse
 from api.serializers import MenuSerializer
 from http import HTTPStatus
+from parameterized import parameterized
+from django.db.models import Count
 
 
 class MenusListView(TestCase):
     def setUp(self):
-        Menu.objects.create(name="Menu 1", description="Menu description 1")
-        Menu.objects.create(name="Menu 2", description="Menu description 2")
+        menus = [
+            Menu.objects.create(name="Menu 1", description="Menu description 1"),
+            Menu.objects.create(name="Menu 2", description="Menu description 2"),
+        ]
+        Dish.objects.create(
+            menu=menus[1], description="foo", price=5.99, prepare_time=15, is_vegan=False
+        )
 
     def test_get_all_menus(self):
-        response = self.client.get(reverse("get_menus"))
+        # GIVEN
         menus = Menu.objects.all()
         serializer = MenuSerializer(menus, many=True)
+
+        # WHEN
+        response = self.client.get(reverse("get_menus"))
+
+        # THEN
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    @parameterized.expand(
+        [
+            ("ascending", "name"),
+            ("descending", "-name"),
+        ]
+    )
+    def test_sort_by_name(self, name, ordering):
+        # GIVEN
+        menus = Menu.objects.order_by(ordering)
+        serializer = MenuSerializer(menus, many=True)
+
+        # WHEN
+        response = self.client.get(reverse("get_menus"), {"ordering": ordering})
+
+        # THEN
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    @parameterized.expand(
+        [
+            ("ascending", "dishes_count"),
+            ("descending", "-dishes_count"),
+        ]
+    )
+    def test_sort_by_dishes_count(self, name, ordering):
+        # GIVEN
+        menus = Menu.objects.annotate(dishes_count=Count("dishes")).order_by(ordering)
+        serializer = MenuSerializer(menus, many=True)
+
+        # WHEN
+        response = self.client.get(reverse("get_menus"), {"ordering": ordering})
+
+        # THEN
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
