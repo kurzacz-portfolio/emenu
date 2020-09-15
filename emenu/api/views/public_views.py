@@ -1,9 +1,10 @@
-from api.serializers import MenuSerializer
-from api.models import Menu
-from rest_framework.generics import ListAPIView
+from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from django.db.models import Count
+from rest_framework.generics import ListAPIView
+
+from api.models import Menu
+from api.serializers import MenuSerializer
 
 
 class MenusListView(ListAPIView):
