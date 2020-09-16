@@ -22,4 +22,5 @@ from api.views import public_views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("menus/", public_views.MenusListView.as_view(), name="get_menus"),
+    path("menu/<int:id>/details", public_views.MenuDetailsView.as_view(), name="get_menu_details"),
 ]
