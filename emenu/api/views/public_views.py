@@ -1,10 +1,11 @@
 from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from api.models import Menu
-from api.serializers import MenuSerializer
+from api.serializers import MenuSerializer, MenuDetailsSerializer
+from rest_framework import viewsets
 
 
 class MenusListView(ListAPIView):
@@ -15,3 +16,9 @@ class MenusListView(ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ["name", "created_at", "updated_at"]
     ordering_fields = ["name", "dishes_count"]
+
+
+class MenuDetailsView(RetrieveAPIView):
+    lookup_field = 'id'
+    serializer_class = MenuDetailsSerializer
+    queryset = Menu.objects.annotate(dishes_count=Count("dishes")).order_by("id")

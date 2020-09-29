@@ -6,7 +6,7 @@ from django.urls import reverse
 from parameterized import parameterized
 
 from api.models import Dish, Menu
-from api.serializers import MenuSerializer
+from api.serializers import MenuDetailsSerializer, MenuSerializer
 
 
 class MenusListView(TestCase):
@@ -36,10 +36,7 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [
-            ("ascending", "name"),
-            ("descending", "-name"),
-        ]
+        [("ascending", "name"), ("descending", "-name"),]
     )
     def test_sort_by_name(self, name, ordering):
         # GIVEN
@@ -54,10 +51,7 @@ class MenusListView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [
-            ("ascending", "dishes_count"),
-            ("descending", "-dishes_count"),
-        ]
+        [("ascending", "dishes_count"), ("descending", "-dishes_count"),]
     )
     def test_sort_by_dishes_count(self, name, ordering):
         # GIVEN
@@ -105,6 +99,47 @@ class MenusListView(TestCase):
 
         # WHEN
         response = self.client.get(reverse("get_menus"), {"updated_at": menu_updated_at})
+
+        # THEN
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+class MenuDetailView(TestCase):
+    def setUp(self):
+        self.menu = Menu.objects.create(name="Menu 1", description="Menu description 1")
+
+        self.dishes = [
+            Dish.objects.create(
+                menu=self.menu,
+                description="foo",
+                price=15.99,
+                prepare_time=15,
+                is_vegan=True,
+            ),
+            Dish.objects.create(
+                menu=self.menu,
+                description="bar",
+                price=20,
+                prepare_time=5,
+                is_vegan=False,
+            ),
+            Dish.objects.create(
+                menu=self.menu,
+                description="baz",
+                price=35.01,
+                prepare_time=12,
+                is_vegan=True,
+            ),
+        ]
+
+    def test_menu_details(self):
+        # GIVEN
+        menu = self.menu
+        serializer = MenuDetailsSerializer(menu)
+
+        # WHEN
+        response = self.client.get(reverse("get_menu_details", kwargs={"id": menu.id}))
 
         # THEN
         self.assertEqual(response.data, serializer.data)
