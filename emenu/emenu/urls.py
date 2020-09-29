@@ -15,12 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
-from api.views import public_views
+from api.views import private_views, public_views
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("menus/", public_views.MenusListView.as_view(), name="get_menus"),
-    path("menu/<int:id>/details", public_views.MenuDetailsView.as_view(), name="get_menu_details"),
+    path("admin", admin.site.urls),
+    path("auth", obtain_auth_token, name="token_auth"),
+    path("invalidate", private_views.Invalidate.as_view(), name="invalidate"),
+    path("menus", public_views.MenusListView.as_view(), name="get_menus"),
+    path(
+        "menu/<int:id>/details",
+        public_views.MenuDetailsView.as_view(),
+        name="get_menu_details",
+    ),
 ]

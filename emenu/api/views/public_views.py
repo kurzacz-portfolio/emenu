@@ -4,8 +4,7 @@ from rest_framework import filters
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from api.models import Menu
-from api.serializers import MenuSerializer, MenuDetailsSerializer
-from rest_framework import viewsets
+from api.serializers import MenuDetailsSerializer, MenuSerializer
 
 
 class MenusListView(ListAPIView):
@@ -19,6 +18,6 @@ class MenusListView(ListAPIView):
 
 
 class MenuDetailsView(RetrieveAPIView):
-    lookup_field = 'id'
+    lookup_field = "id"
     serializer_class = MenuDetailsSerializer
     queryset = Menu.objects.annotate(dishes_count=Count("dishes")).order_by("id")
