@@ -23,7 +23,7 @@ from api.views import private_views, public_views
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
-    path("invalidate", private_views.Invalidate.as_view(), name="invalidate"),
+    path("invalidate", private_views.InvalidateToken.as_view(), name="invalidate_token"),
     path("menus", public_views.MenusListView.as_view(), name="get_menus"),
     path(
         "menu/<int:id>/details",
