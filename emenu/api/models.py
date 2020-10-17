@@ -10,6 +10,7 @@ class Menu(models.Model):
 
 class Dish(models.Model):
     menu = models.ForeignKey(Menu, related_name="dishes", on_delete=models.CASCADE)
+    name = models.CharField(max_length=63, unique=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=4, decimal_places=2)
     prepare_time = models.IntegerField()  # in minutes
