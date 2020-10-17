@@ -24,7 +24,6 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
     path("invalidate", emenu.authorization.InvalidateToken.as_view(), name="invalidate_token"),
-    path("menus_old", emenu.public_views.MenusListView.as_view(), name="get_menus"),
     path(
         "menu/<int:id>/details",
         emenu.menu_details.MenuDetailsView.as_view(),
