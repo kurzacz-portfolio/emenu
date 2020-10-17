@@ -17,17 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from .api import router
-from api.views import private_views, public_views
+import api.views as emenu
 
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
-    path("invalidate", private_views.InvalidateToken.as_view(), name="invalidate_token"),
-    path("menus_old", public_views.MenusListView.as_view(), name="get_menus"),
+    path("invalidate", emenu.authorization.InvalidateToken.as_view(), name="invalidate_token"),
+    path("menus_old", emenu.public_views.MenusListView.as_view(), name="get_menus"),
     path(
         "menu/<int:id>/details",
-        public_views.MenuDetailsView.as_view(),
+        emenu.public_views.MenuDetailsView.as_view(),
         name="get_menu_details",
     ),
     path("menus/", include((router.urls, "emenu"), namespace="menus")),
