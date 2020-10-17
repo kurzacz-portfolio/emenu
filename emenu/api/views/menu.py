@@ -9,10 +9,8 @@ from api.serializers import MenuDetailsSerializer, MenuSerializer
 from rest_framework.decorators import action
 
 
-class InvalidateToken(APIView):
-    permission_classes = (IsAuthenticated,)
+class MenuViewSet(ModelViewSet):
 
-    def post(self, request, format=None):
-        self.request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

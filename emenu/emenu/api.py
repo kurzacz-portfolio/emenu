@@ -1,5 +1,5 @@
 from rest_framework import routers
-from api.views import private_views
+from api.views import menu
 
 router = routers.DefaultRouter()
-router.register(r'menucrud', private_views.MenuViewSet)
+router.register(r"", menu.MenuViewSet, basename="menu-crud")

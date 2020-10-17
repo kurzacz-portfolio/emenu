@@ -24,11 +24,11 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
     path("invalidate", private_views.InvalidateToken.as_view(), name="invalidate_token"),
-    path("menus", public_views.MenusListView.as_view(), name="get_menus"),
+    path("menus_old", public_views.MenusListView.as_view(), name="get_menus"),
     path(
         "menu/<int:id>/details",
         public_views.MenuDetailsView.as_view(),
         name="get_menu_details",
     ),
-    path("api/v1/", include(router.urls)),
+    path("menus/", include((router.urls, "emenu"), namespace="menus")),
 ]
