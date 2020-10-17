@@ -17,7 +17,3 @@ class MenusListView(ListAPIView):
     ordering_fields = ["name", "dishes_count"]
 
 
-class MenuDetailsView(RetrieveAPIView):
-    lookup_field = "id"
-    serializer_class = MenuDetailsSerializer
-    queryset = Menu.objects.annotate(dishes_count=Count("dishes")).order_by("id")

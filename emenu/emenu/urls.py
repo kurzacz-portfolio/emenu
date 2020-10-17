@@ -27,7 +27,7 @@ urlpatterns = [
     path("menus_old", emenu.public_views.MenusListView.as_view(), name="get_menus"),
     path(
         "menu/<int:id>/details",
-        emenu.public_views.MenuDetailsView.as_view(),
+        emenu.menu_details.MenuDetailsView.as_view(),
         name="get_menu_details",
     ),
     path("menus/", include((router.urls, "emenu"), namespace="menus")),
