@@ -8,7 +8,7 @@ class Menu(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-# TODO: Add `name` field to `Dish` model
+# TODO: Set name fields to blank=False
 class Dish(models.Model):
     menu = models.ForeignKey(Menu, related_name="dishes", on_delete=models.CASCADE)
     name = models.CharField(max_length=63, unique=True)

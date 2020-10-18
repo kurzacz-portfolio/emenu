@@ -26,6 +26,7 @@ class PublicMenuViewTest(TestCase):
         self.dishes = [
             Dish.objects.create(
                 menu=self.menus[1],
+                name="Dish 1",
                 description="foo",
                 price=15.99,
                 prepare_time=15,
@@ -33,6 +34,7 @@ class PublicMenuViewTest(TestCase):
             ),
             Dish.objects.create(
                 menu=self.menus[1],
+                name="Dish 2",
                 description="bar",
                 price=20,
                 prepare_time=5,
@@ -40,6 +42,7 @@ class PublicMenuViewTest(TestCase):
             ),
             Dish.objects.create(
                 menu=self.menus[1],
+                name="Dish 3",
                 description="baz",
                 price=35.01,
                 prepare_time=12,

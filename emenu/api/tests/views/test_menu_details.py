@@ -14,6 +14,7 @@ class MenuDetailView(TestCase):
         self.dishes = [
             Dish.objects.create(
                 menu=self.menu,
+                name="Dish 1",
                 description="foo",
                 price=15.99,
                 prepare_time=15,
@@ -21,6 +22,7 @@ class MenuDetailView(TestCase):
             ),
             Dish.objects.create(
                 menu=self.menu,
+                name="Dish 2",
                 description="bar",
                 price=20,
                 prepare_time=5,
@@ -28,6 +30,7 @@ class MenuDetailView(TestCase):
             ),
             Dish.objects.create(
                 menu=self.menu,
+                name="Dish 3",
                 description="baz",
                 price=35.01,
                 prepare_time=12,
