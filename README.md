@@ -32,6 +32,7 @@ Then, install all requirements:
 ```shell script
 $ pip install -U pip
 $ pip install -r emenu/requirements.txt
+$ pip install -r emenu/requirements.dev.txt
 ```
 
 Before you run tests, you need working postgresql database. One way is to start
