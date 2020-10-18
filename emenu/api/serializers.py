@@ -8,7 +8,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ["name", "description", "created_at", "updated_at", "dishes_count"]
+        fields = "__all__"
 
     def get_dishes_count(self, obj: Menu) -> int:
         return obj.dishes.count()
@@ -17,14 +17,7 @@ class MenuSerializer(serializers.ModelSerializer):
 class DishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dish
-        fields = [
-            "description",
-            "price",
-            "prepare_time",
-            "created_at",
-            "updated_at",
-            "is_vegan",
-        ]
+        fields = "__all__"
 
 
 class MenuDetailsSerializer(MenuSerializer):
@@ -32,11 +25,4 @@ class MenuDetailsSerializer(MenuSerializer):
 
     class Meta:
         model = Menu
-        fields = [
-            "name",
-            "description",
-            "created_at",
-            "updated_at",
-            "dishes",
-            "dishes_count",
-        ]
+        fields = "__all__"

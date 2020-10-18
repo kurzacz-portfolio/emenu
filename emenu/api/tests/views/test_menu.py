@@ -10,10 +10,7 @@ from rest_framework.test import APIClient
 
 from api.models import Dish, Menu
 from api.serializers import MenuDetailsSerializer, MenuSerializer
-
-
-TEST_USER_NAME = "testuser"
-TEST_USER_PASS = "12345"
+from api.tests.custom_test_cases import AuthorizedTestCase
 
 
 class PublicMenuViewTest(TestCase):
@@ -56,14 +53,14 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"))
+        response = self.client.get(reverse("emenu:menu_crud-list"))
 
         # THEN
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "name"), ("descending", "-name"), ]
+        [("ascending", "name"), ("descending", "-name"),]
     )
     def test_sort_by_name(self, name, ordering):
         # GIVEN
@@ -71,15 +68,16 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"),
-                                   {"ordering": ordering})
+        response = self.client.get(
+            reverse("emenu:menu_crud-list"), {"ordering": ordering}
+        )
 
         # THEN
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     @parameterized.expand(
-        [("ascending", "dishes_count"), ("descending", "-dishes_count"), ]
+        [("ascending", "dishes_count"), ("descending", "-dishes_count"),]
     )
     def test_sort_by_dishes_count(self, name, ordering):
         # GIVEN
@@ -87,8 +85,9 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"),
-                                   {"ordering": ordering})
+        response = self.client.get(
+            reverse("emenu:menu_crud-list"), {"ordering": ordering}
+        )
 
         # THEN
         self.assertEqual(response.data, serializer.data)
@@ -101,7 +100,7 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"), {"name": menu_name})
+        response = self.client.get(reverse("emenu:menu_crud-list"), {"name": menu_name})
 
         # THEN
         self.assertEqual(response.data, serializer.data)
@@ -114,8 +113,9 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"),
-                                   {"created_at": menu_created_at})
+        response = self.client.get(
+            reverse("emenu:menu_crud-list"), {"created_at": menu_created_at}
+        )
 
         # THEN
         self.assertEqual(response.data, serializer.data)
@@ -128,9 +128,46 @@ class PublicMenuViewTest(TestCase):
         serializer = MenuSerializer(menus, many=True)
 
         # WHEN
-        response = self.client.get(reverse("emenu:menu-crud-list"),
-                                   {"updated_at": menu_updated_at})
+        response = self.client.get(
+            reverse("emenu:menu_crud-list"), {"updated_at": menu_updated_at}
+        )
 
         # THEN
         self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+class AuthorizedMenuViewTest(AuthorizedTestCase):
+    def test_create_menu(self):
+        # GIVEN
+        create_payload = {
+            "name": "Test menu name",
+            "description": "Test description",
+        }
+
+        # WHEN
+        response = self.client.post(
+            reverse("emenu:menu_crud-list"), create_payload, format="json"
+        )
+
+        # THEN
+        self.assertEqual(response.status_code, HTTPStatus.CREATED)
+
+    def test_update_menu_put(self):
+        # GIVEN
+        menu = Menu.objects.create(name="Test Menu", description="Test description")
+        changed_name = "Changed menu name"
+        update_payload = {
+            "name": changed_name,
+            "description": "Test description",
+        }
+
+        # WHEN
+        response = self.client.put(
+            reverse("emenu:menu_crud-detail", kwargs={"pk": menu.id}),
+            update_payload,
+            format="json",
+        )
+
+        # THEN
         self.assertEqual(response.status_code, HTTPStatus.OK)
