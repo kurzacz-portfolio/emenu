@@ -6,9 +6,12 @@ on:
   pull_request:
     branches: [ master ]
 
+defaults:
+  run:
+    working-directory: emenu
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +23,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r emenu/requirements.txt
+        pip install -r requirements.txt
     - name: Run Tests
       run: |
         python manage.py test
