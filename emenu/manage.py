@@ -7,7 +7,7 @@ import sys
 def main():
     """Run administrative tasks."""
     if sys.argv[1] == "test":
-        os.environ["DJANGO_SETTINGS_MODULE"] = "emenu.settings-test"
+        os.environ["DJANGO_SETTINGS_MODULE"] = "emenu.settings_test"
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "emenu.settings")
     try:
         from django.core.management import execute_from_command_line
