@@ -23,11 +23,11 @@ import api.views as emenu
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
-    path("invalidate", emenu.authorization.InvalidateToken.as_view(), name="invalidate_token"),
+    path("invalidate", emenu.InvalidateToken.as_view(), name="invalidate_token"),
     path(
         "menu/<int:id>/details",
-        emenu.menu_details.MenuDetailsView.as_view(),
+        emenu.MenuDetailsView.as_view(),
         name="get_menu_details",
     ),
-    path("menus/", include((router.urls, "emenu"), namespace="menus")),
+    path("", include((router.urls, "emenu"), namespace="menus")),
 ]
