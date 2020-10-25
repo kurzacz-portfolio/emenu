@@ -14,13 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-from api.views import public_views
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from .api import router
+import api.views as emenu
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("menus/", public_views.MenusListView.as_view(), name="get_menus"),
-    path("menu/<int:id>/details", public_views.MenuDetailsView.as_view(), name="get_menu_details"),
+    path("admin", admin.site.urls),
+    path("auth", obtain_auth_token, name="token_auth"),
+    path("invalidate", emenu.authorization.InvalidateToken.as_view(), name="invalidate_token"),
+    path(
+        "menu/<int:id>/details",
+        emenu.menu_details.MenuDetailsView.as_view(),
+        name="get_menu_details",
+    ),
+    path("menus/", include((router.urls, "emenu"), namespace="menus")),
 ]
