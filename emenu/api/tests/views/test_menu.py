@@ -138,7 +138,7 @@ class PublicMenuViewTest(TestCase):
 
 
 class AuthorizedMenuViewTest(AuthorizedTestCase):
-    def test_create_menu(self):
+    def test_create_positive(self):
         # GIVEN
         create_payload = {
             "name": "Test menu name",
@@ -153,7 +153,22 @@ class AuthorizedMenuViewTest(AuthorizedTestCase):
         # THEN
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
 
-    def test_update_menu_put(self):
+    def test_create_reject_blank_menu_name(self):
+        # GIVEN
+        create_payload = {
+            "name": "",
+            "description": "Test description",
+        }
+
+        # WHEN
+        response = self.client.post(
+            reverse("emenu:menu_crud-list"), create_payload, format="json"
+        )
+
+        # THEN
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_update_positive(self):
         # GIVEN
         menu = Menu.objects.create(name="Test Menu", description="Test description")
         changed_name = "Changed menu name"
