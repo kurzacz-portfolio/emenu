@@ -2,6 +2,9 @@ asgiref==3.2.10
 Django==3.1.1
 djangorestframework==3.11.1
 django-filter==2.3.0
+drf-yasg==1.20.0
 pytz==2020.1
 sqlparse==0.3.1
 psycopg2-binary
+pyyaml==5.3.1
+uritemplate==3.0.1
