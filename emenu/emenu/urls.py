@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import obtain_auth_token
 
 import api.views as emenu
@@ -34,9 +36,13 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+decorated_auth_view = swagger_auto_schema(
+    method="post", request_body=AuthTokenSerializer
+)(obtain_auth_token)
+
 urlpatterns = [
     path("admin", admin.site.urls),
-    path("auth", obtain_auth_token, name="token_auth"),
+    path("auth", decorated_auth_view, name="token_auth"),
     path(
         "invalidate",
         emenu.authorization.InvalidateToken.as_view(),
