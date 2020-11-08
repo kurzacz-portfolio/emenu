@@ -33,7 +33,7 @@ schema_view = get_schema_view(
         description="This is auto-generated documentation for example restaurant's API",
     ),
     public=True,
-    permission_classes=[permissions.AllowAny],
+    permission_classes=(permissions.AllowAny,),
 )
 
 decorated_auth_view = swagger_auto_schema(
@@ -54,11 +54,6 @@ urlpatterns = [
         name="get_menu_details",
     ),
     path("menus/", include((router.urls, "emenu"), namespace="menus")),
-    # path('openapi/', get_schema_view(
-    #     title="e-menu service",
-    #     description="API docs"
-    # ), name='openapi-schema'),
-    # path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path(
         r"swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
