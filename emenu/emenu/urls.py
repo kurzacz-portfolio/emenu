@@ -14,20 +14,48 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from rest_framework.authtoken.views import obtain_auth_token
-from .api import router
-import api.views as emenu
 
+import api.views as emenu
+from .api import router
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="e-menu API",
+        default_version="v1",
+        description="This is auto-generated documentation for example restaurant's API",
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth", obtain_auth_token, name="token_auth"),
-    path("invalidate", emenu.authorization.InvalidateToken.as_view(), name="invalidate_token"),
+    path(
+        "invalidate",
+        emenu.authorization.InvalidateToken.as_view(),
+        name="invalidate_token",
+    ),
     path(
         "menu/<int:id>/details",
         emenu.menu_details.MenuDetailsView.as_view(),
         name="get_menu_details",
     ),
     path("menus/", include((router.urls, "emenu"), namespace="menus")),
+    # path('openapi/', get_schema_view(
+    #     title="e-menu service",
+    #     description="API docs"
+    # ), name='openapi-schema'),
+    # path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path(
+        r"swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
 ]
