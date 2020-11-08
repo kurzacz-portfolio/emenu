@@ -16,6 +16,16 @@ Start whole project with:
 $ docker-compose up
 ```
 
+
+## Browse API
+Create a user first, so you may authorize for secured API endpoints. Do this e.g.
+with command `$ python manage.py createsuperuser`
+
+Visit URL http://localhost:8000/swagger/. Authenticate with endpoint `auth`.
+Then, copy token. Use button *Authorize* and paste token with prefix `Token `, e.g.:
+`Token 1e2e563f36f2efe83d0f282da9205aa7eefcceed` 
+
+
 ## Running tests
 
 Create virtual environment in main directory:
